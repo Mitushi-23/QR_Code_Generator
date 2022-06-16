@@ -1,51 +1,38 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Container } from "@mui/system";
-import "./App.css";
-import QRCode from "qrcode";
-import { useState, useRef } from "react";
-import ClearIcon from "@mui/icons-material/Clear";
+import React, {useState, useRef} from 'react';
+import {Container, Card, CardContent, makeStyles, Grid, TextField, Button} from '@material-ui/core';
+import QRCode from 'qrcode';
 import QrReader from 'react-qr-reader';
+// import ClearIcon from '@material-ui/icons/Clear';
 
-function App() {
-  const [text, setText] = useState("");
-  const [imageURL, setImageURL] = useState("");
-  const [scanResultFile, setScanResultFile] = useState("");
+
+function App() { 
+  const [text, setText] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [scanResultFile, setScanResultFile] = useState('');
   const [scanResultWebCam, setScanResultWebCam] =  useState('');
+  const classes = useStyles();
   const qrRef = useRef(null);
-  const generateQRCode = async () => {
+
+
+  const generateQrCode = async () => {
     try {
-      const response = await QRCode.toDataURL(text);
-      setImageURL(response);
-    } catch (error) {
+          const response = await QRCode.toDataURL(text);
+          setImageUrl(response);
+    }catch (error) {
       console.log(error);
     }
-  };
-  const clearText = () => {
-    setText("");
-    setImageURL("");
-  };
-
-  const onScanFile=()=>{
-    qrRef.current.openImageDialog();
   }
-
   const handleErrorFile = (error) => {
     console.log(error);
-  };
-
+  }
   const handleScanFile = (result) => {
-    if (result) {
-      setScanResultFile(result);
-    }
-  };
-
+      if (result) {
+          setScanResultFile(result);
+      }
+  }
+  const onScanFile = () => {
+    qrRef.current.openImageDialog();
+  }
   const handleErrorWebCam = (error) => {
     console.log(error);
   }
@@ -53,87 +40,83 @@ function App() {
     if (result){
         setScanResultWebCam(result);
     }
-  }
+   }
+   const clearText = () => {
+    setText("");
+    setImageUrl("");
+  };
 
   return (
-    <>
-      <Container style={{ marginTop: "2%" }}>
-        <Card>
-          <Typography
-            variant="h4"
-            textAlign="center"
-            style={{
-              backgroundColor: "#3f51b5",
-              color: "#fff",
-              padding: "10px",
-            }}
-          >
-            Generate Download & Scan QR Code
-          </Typography>
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                <TextField
-                  label="Enter Text Here"
-                  value={text}
-                  variant="standard"
-                  onChange={(e) => setText(e.target.value)}
-                />
-                <ClearIcon onClick={() => clearText()} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ marginTop: "10px", marginBottom: "20px" }}
-                  onClick={() => generateQRCode()}
-                >
-                  Generate
-                </Button>
-
-                {imageURL && (
+    <Container className={classes.conatiner}>
+          <Card>
+              <h2 className={classes.title}>Generate Download & Scan QR Code with React js</h2>
+              <CardContent>
+                  <Grid container spacing={2}>
+                      <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                          <TextField label="Enter Text Here" value={text} onChange={(e) => setText(e.target.value)}/>
+                          <Button onClick={() => clearText()}>Clear</Button>
+                          <Button className={classes.btn} variant="contained" 
+                            color="primary" onClick={() => generateQrCode()}>Generate</Button>
+                            
+                            {imageUrl && (
                   <>
-                    <img src={imageURL} alt="img" />
+                    <img src={imageUrl} alt="img" />
                     <br />
                     <Button
                       size="small"
                       variant="outlined"
-                      href={imageURL}
+                      href={imageUrl}
                       download
                     >
                       Download
                     </Button>
                   </>
                 )}
-              </Grid>
-              <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                <Button variant="contained" color="secondary" onClick={onScanFile}>
-                  Scan QR Code
-                </Button>
-                <QrReader
-                  ref={qrRef}
-                  delay={300}
-                  style={{ width: "100%" }}
-                  onError={handleErrorFile}
-                  onScan={handleScanFile}
-                  legacyMode
-                />
-                <Typography variant="h6">Scanned Code: {scanResultFile}</Typography>
-              </Grid>
-              <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                <Typography variant="h6">Qr Code Scan by Web Cam</Typography>
-                <QrReader
+                      </Grid>
+                      <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                        <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile}>Scan Qr Code</Button>
+                        <QrReader
+                          ref={qrRef}
+                          delay={300}
+                          style={{width: '100%'}}
+                          onError={handleErrorFile}
+                          onScan={handleScanFile}
+                          legacyMode
+                        />
+                        <h3>Scanned Code: {scanResultFile}</h3>
+                      </Grid>
+                      <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                         <h3>Qr Code Scan by Web Cam</h3>
+                         <QrReader
                          delay={300}
                          style={{width: '100%'}}
                          onError={handleErrorWebCam}
                          onScan={handleScanWebCam}
                          />
-                         <Typography variant="h6">Scanned By WebCam Code: {scanResultWebCam}</Typography>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Container>
-    </>
+                         <h3>Scanned By WebCam Code: {scanResultWebCam}</h3>
+                      </Grid>
+                  </Grid>
+              </CardContent>
+          </Card>
+    </Container>
   );
 }
 
+const useStyles = makeStyles((theme) => ({
+    conatiner: {
+      marginTop: 10
+    },
+    title: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems:  'center',
+      background: '#3f51b5',
+      color: '#fff',
+      padding: 20
+    },
+    btn : {
+      marginTop: 10,
+      marginBottom: 20
+    }
+}));
 export default App;
