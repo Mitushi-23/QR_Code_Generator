@@ -17,6 +17,7 @@ function App() {
   const [text, setText] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [scanResultFile, setScanResultFile] = useState("");
+  const [scanResultWebCam, setScanResultWebCam] =  useState('');
   const qrRef = useRef(null);
   const generateQRCode = async () => {
     try {
@@ -44,6 +45,15 @@ function App() {
       setScanResultFile(result);
     }
   };
+
+  const handleErrorWebCam = (error) => {
+    console.log(error);
+  }
+  const handleScanWebCam = (result) => {
+    if (result){
+        setScanResultWebCam(result);
+    }
+  }
 
   return (
     <>
@@ -104,11 +114,20 @@ function App() {
                   style={{ width: "100%" }}
                   onError={handleErrorFile}
                   onScan={handleScanFile}
-                  legacyMode={false}
+                  legacyMode
                 />
                 <Typography variant="h6">Scanned Code: {scanResultFile}</Typography>
               </Grid>
-              <Grid item xl={4} lg={4} md={6} sm={12} xs={12}></Grid>
+              <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                <Typography variant="h6">Qr Code Scan by Web Cam</Typography>
+                <QrReader
+                         delay={300}
+                         style={{width: '100%'}}
+                         onError={handleErrorWebCam}
+                         onScan={handleScanWebCam}
+                         />
+                         <Typography variant="h6">Scanned By WebCam Code: {scanResultWebCam}</Typography>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>
