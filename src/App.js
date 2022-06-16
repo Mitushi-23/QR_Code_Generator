@@ -79,7 +79,7 @@ function App() {
                   variant="standard"
                   onChange={(e) => setText(e.target.value)}
                 />
-                <ClearIcon style={{cursor:'pointer'}} onClick={() => clearText()} />
+                <ClearIcon onClick={() => clearText()} />
                 <Button
                   variant="contained"
                   color="primary"
