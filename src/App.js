@@ -199,7 +199,7 @@ function App() {
                 </CopyToClipboard>
                 </Button>
                 </div>
-                {str1.startsWith("http://") ? (
+                {str1.startsWith("http://")|| str1.startsWith("https://") ? (
                   <Link href={scanResultWebCam}target="_blank">{scanResultWebCam}</Link>
                 ) : (
                   <Typography>{scanResultWebCam}</Typography>
