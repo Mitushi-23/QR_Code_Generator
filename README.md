@@ -5,6 +5,7 @@ You can generate scan and upload QR Code to obtain required text or link.
 ---
 
 ### Features
+* Code generated can be downloaded.
 * You can copy the result obtained.
 * You can directly open the link from the app itself by clicking on it.
 ---
